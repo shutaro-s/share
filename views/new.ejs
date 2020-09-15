@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>新規作成</title>
+  </head>
+  <body>
+    <div class="test">
+      <form action="/create" method="post">
+        従業員コード
+        <input type="text" name="employeeId">
+        名前
+        <input type="text" name="employeeName">
+        パスワード
+        <input type="text" name="employeePass">
+        <select name="employeeAdmin">
+          <option value="">選択してください
+          <option value="0">バイト
+          <option value="1">社員
+        </select>
+        <input type="submit" value="作成する">
+      </form>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>トップページ</title>
+  </head>
+  <body>
+    <% if (employees[0].admin_flag == 1) {%>
+      <a href="/new">新規作成</a>
+    <% } %>
+    <h1><%= employees[0].name %>さん、こんにちは</h1>
+  </body>
+</html>
