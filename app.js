@@ -142,6 +142,35 @@ app.post('/shift/:id', (req, res) => {
   );
 });
 
+//シフト編集
+app.get('/edit/:shift_id',(req,res)=>{
+  connection.query(
+    'SELECT id, employee_id, DATE_FORMAT(startAt, "%Y-%m-%d") AS update_date, HOUR(startAt) AS starth, MINUTE(startAt) AS startm, HOUR(endAt) AS endh, MINUTE(endAt) AS endm, ex FROM testtime WHERE id = ?',
+    [req.params.shift_id],
+    (error,results)=>{
+      res.render('edit.ejs',{timesheets:results});
+    }
+  )
+});
+app.post('/update/:id/:employee_id',(req,res)=>{
+  var date_str = req.body.date;
+  var start_str = date_str + " " + req.body.startHour + "*" + req.body.startMinute + "*00";
+  var end_str = date_str + " " + req.body.endHour + "*" + req.body.endMinute + "*00";
+  connection.query(
+    'UPDATE testtime SET startAt = ?, endAt = ?, ex = ? WHERE id = ?',
+    [start_str, end_str, req.body.ex, req.params.id],
+    (error,results)=>{
+      connection.query(
+        'SELECT e.id, e.name, e.admin_flag, e.password, t.id AS shift_id, YEAR(t.startAt) AS YEAR, MONTH(t.startAt) AS MONTH, DAY(t.startAt) AS DAY,DAYOFWEEK(t.startAt) AS DAYOFWEEK, DATE_FORMAT(t.startAt, "%k:%i") AS STARTTIME, DATE_FORMAT(t.endAt, "%k:%i") AS ENDTIME, t.ex FROM testemployee AS e LEFT JOIN testtime AS t ON t.employee_id = e.id WHERE e.id = ? ORDER BY t.startAt ASC',
+        [req.params.employee_id],
+        (error,results)=>{
+          res.render('index.ejs',{employees:results});
+        }
+      )
+    }
+  )
+});
+
 //シフト削除
 app.post('/delete/:shift_id/:id',(req,res)=>{
   connection.query(
