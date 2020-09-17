@@ -5,7 +5,7 @@
     <title>トップページ</title>
   </head>
   <body>
-    <h1><%= employees[0].name %>さん、こんにちは</h1>
+    <h1><%= employees[0].name %></h1>
       <% if (employees[0].admin_flag == 1) { %>
         <a href="/new/<%= employees[0].password %>">新規作成</a>
         <form action="/pass" method="post">
