@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>パスワード変更</title>
+  </head>
+  <body>
+    <h1><%= employees[0].name%></h1>
+    <form action="/change/<%= employees[0].id%>" method="post">
+      新しいパスワード
+      <input type="text" name="pass">
+      <input type="submit" value="変更">
+    </form>
+  </body>
+</html>

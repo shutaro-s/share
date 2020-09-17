@@ -1,9 +1,9 @@
 CREATE TABLE shifty.testtime (
     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     employee_id VARCHAR(255) NOT NULL,
-    date DATE,
-    startAt INT,
-    endAt INT,
+    startAt DATETIME,
+    endAt DATETIME,
+    ex VARCHAR(255),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     update_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 )DEFAULT CHARSET = utf8;

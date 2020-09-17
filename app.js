@@ -29,6 +29,9 @@ app.get('/', (req, res) => {
   res.render('login.ejs');
 });
 //ログインチェック&トップページ
+app.get('/index', (req, res) => {
+  res.redirect('/');
+});
 app.post('/index', (req, res) => {
   var pass = req.body.pass;
   // 暗号化
@@ -36,7 +39,7 @@ app.post('/index', (req, res) => {
   sha512.update(pass)
   var hash = sha512.digest('hex')
   connection.query(
-    'SELECT e.id, e.name, e.admin_flag, t.date,t.startAt, t.endAt FROM testemployee AS e LEFT JOIN testtime AS t ON t.employee_id = e.id where e.id=? AND e.password = ?',
+    'SELECT e.id, e.name, e.admin_flag, e.password, t.id AS shift_id, YEAR(t.startAt) AS YEAR, MONTH(t.startAt) AS MONTH, DAY(t.startAt) AS DAY,DAYOFWEEK(t.startAt) AS DAYOFWEEK, DATE_FORMAT(t.startAt, "%k:%i") AS STARTTIME, DATE_FORMAT(t.endAt, "%k:%i") AS ENDTIME, t.ex FROM testemployee AS e LEFT JOIN testtime AS t ON t.employee_id = e.id WHERE e.id = ? AND e.password = ? ORDER BY t.startAt ASC',
     [req.body.id, hash],
     (error, results) => {
       //resultsがnullならリダイレクト
@@ -51,7 +54,21 @@ app.post('/index', (req, res) => {
 
 //新規作成画面遷移&新規作成処理
 app.get('/new', (req, res) => {
-  res.render('new.ejs');
+  res.redirect('/');
+});
+app.get('/new/:password', (req, res) => {
+  connection.query(
+    'SELECT * FROM testemployee WHERE password = ?',
+    [req.params.password],
+    (error, results) => {
+      //resultsがnullならリダイレクト
+      if(results[0] == null){
+        res.redirect('/');
+      } else {
+        res.render('new.ejs');
+      }
+    }
+  );
 });
 app.post('/create', (req, res) => {
   var pass = req.body.employeePass;
@@ -71,4 +88,74 @@ app.post('/create', (req, res) => {
   );
 });
 
+//パスワード変更
+app.post('/pass', (req, res) => {
+  connection.query(
+    'SELECT * FROM testemployee WHERE id = ?',
+    [req.body.id],
+    (error, results) => {
+      //resultsがnullならリダイレクト
+      if(results[0] == null){
+        res.redirect('/');
+      } else {
+        res.render('pass.ejs', {employees: results});
+      }
+    }
+  );
+});
+app.post('/change/:id', (req, res) => {
+  var pass = req.body.pass;
+  // 暗号化
+  var sha512 = crypto.createHash('sha512');
+  sha512.update(pass)
+  var hash = sha512.digest('hex')
+  connection.query(
+    'UPDATE testemployee SET password = ? WHERE id = ?',
+    [hash, req.params.id],
+    (error, results) => {
+      res.redirect('/');
+    }
+  );
+});
+
+//シフト提出
+app.get('/submit/:id/:password', (req, res) => {
+  var params = req.params;
+  res.render('submit.ejs', {ids: params});
+});
+app.post('/shift/:id', (req, res) => {
+  var date_str = req.body.date;
+  var start_str = date_str + " " + req.body.startHour + "*" + req.body.startMinute + "*00";
+  var end_str = date_str + " " + req.body.endHour + "*" + req.body.endMinute + "*00";
+  connection.query(
+    'INSERT INTO testtime (employee_id, startAt, endAt, ex) VALUES(?, ?, ?, ?)',
+    [req.params.id, start_str, end_str, req.body.ex],
+    (error, results) => {
+      connection.query(
+        'SELECT e.id, e.name, e.admin_flag, e.password, t.id AS shift_id, YEAR(t.startAt) AS YEAR, MONTH(t.startAt) AS MONTH, DAY(t.startAt) AS DAY,DAYOFWEEK(t.startAt) AS DAYOFWEEK, DATE_FORMAT(t.startAt, "%k:%i") AS STARTTIME, DATE_FORMAT(t.endAt, "%k:%i") AS ENDTIME, t.ex FROM testemployee AS e LEFT JOIN testtime AS t ON t.employee_id = e.id WHERE e.id = ? ORDER BY t.startAt ASC',
+        [req.params.id],
+        (error,results)=>{
+          res.render('index.ejs',{employees:results});
+        }
+      );
+    }
+  );
+});
+
+//シフト削除
+app.post('/delete/:shift_id/:id',(req,res)=>{
+  connection.query(
+    'DELETE FROM testtime WHERE id = ?',
+    [req.params.shift_id],
+    (error,results)=>{
+      connection.query(
+        'SELECT e.id, e.name, e.admin_flag, e.password, t.id AS shift_id, YEAR(t.startAt) AS YEAR, MONTH(t.startAt) AS MONTH, DAY(t.startAt) AS DAY,DAYOFWEEK(t.startAt) AS DAYOFWEEK, DATE_FORMAT(t.startAt, "%k:%i") AS STARTTIME, DATE_FORMAT(t.endAt, "%k:%i") AS ENDTIME, t.ex FROM testemployee AS e LEFT JOIN testtime AS t ON t.employee_id = e.id WHERE e.id = ? ORDER BY t.startAt ASC',
+        [req.params.id],
+        (error,results)=>{
+          res.render('index.ejs',{employees:results});
+        }
+      )
+    }
+  )
+});
 app.listen(3000);

@@ -5,9 +5,60 @@
     <title>トップページ</title>
   </head>
   <body>
-    <% if (employees[0].admin_flag == 1) {%>
-      <a href="/new">新規作成</a>
-    <% } %>
     <h1><%= employees[0].name %>さん、こんにちは</h1>
+      <% if (employees[0].admin_flag == 1) { %>
+        <a href="/new/<%= employees[0].password %>">新規作成</a>
+        <form action="/pass" method="post">
+          <input type="text" name="id" placeholder="従業員ID">
+          <input type="submit" value="変更画面">
+        </form>
+      <% } %>
+    <a href="/submit/<%= employees[0].id%>/<%= employees[0].password%>">シフト提出</a>
+    <table width="40%">
+      <tr>
+        <th align="center">日付</th>
+        <th align="center">希望開始時間</th>
+        <th align="center">希望終了時間</th>
+        <th align="center">備考</th>
+        <th align="center"></th>
+        <th align="center"></th>
+      </tr>
+      <% employees.forEach((employee)=>{ %>
+      <tr>
+        <td align="center"><%= employee.YEAR %>/<%= employee.MONTH %>/<%= employee.DAY %><% switch(employee.DAYOFWEEK){
+          case 1: %>
+            (日)
+            <% break; %>
+          <% case 2: %>
+            (月)
+            <% break; %>
+          <% case 3: %>
+            (火)
+            <% break; %>
+          <% case 4: %>
+            (水)
+            <% break; %>
+          <% case 5: %>
+            (木)
+            <% break; %>
+          <% case 6: %>
+            (金)
+            <% break; %>
+          <% case 7: %>
+            (土)
+            <% break;} %></td>
+        <td align="center"><%= employee.STARTTIME %></td>
+        <td align="center"><%= employee.ENDTIME %></td>
+        <td align="center"><%= employee.ex %></td>
+        <td align="center"><a href="/edit/<%= employee.shift_id %>">編集</a></td>
+        <td align="center">
+          <form action="/delete/<%= employee.shift_id %>/<%= employees[0].id %>" method="post">
+            <input type="submit" value="削除">
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+    <a href="/">ログアウト</a>
   </body>
 </html>
