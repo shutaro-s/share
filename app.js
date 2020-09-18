@@ -52,6 +52,16 @@ app.post('/index', (req, res) => {
   );
 });
 
+//全体確認
+app.get('/confirm', (req, res) => {
+  connection.query(
+    'SELECT e.id, e.name, t.id AS shift_id, YEAR(t.startAt) AS YEAR, MONTH(t.startAt) AS MONTH, DAY(t.startAt) AS DAY,DAYOFWEEK(t.startAt) AS DAYOFWEEK, DATE_FORMAT(t.startAt, "%k:%i") AS STARTTIME, DATE_FORMAT(t.endAt, "%k:%i") AS ENDTIME, t.ex FROM testemployee AS e LEFT JOIN testtime AS t ON t.employee_id = e.id ORDER BY t.startAt ASC',
+    (error, results) => {
+        res.render('confirm.ejs', {shifts: results});
+    }
+  );
+});
+
 //新規作成画面遷移&新規作成処理
 app.get('/new', (req, res) => {
   res.redirect('/');

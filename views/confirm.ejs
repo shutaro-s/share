@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>シフト確認</title>
+  </head>
+  <body>
+    <h1>全体シフト</h1>
+    <table width="40%">
+      <tr>
+        <th align="center">ID</th>
+        <th align="center">名前</th>
+        <th align="center">日付</th>
+        <th align="center">希望開始時間</th>
+        <th align="center">希望終了時間</th>
+        <th align="center">備考</th>
+      </tr>
+      <% shifts.forEach((shift)=>{ %>
+      <tr>
+        <td align="center"><%= shift.id %></td>
+        <td align="center"><%= shift.name %></td>
+        <td align="center"><%= shift.YEAR %>/<%= shift.MONTH %>/<%= shift.DAY %><% switch(shift.DAYOFWEEK){
+          case 1: %>
+            (日)
+            <% break; %>
+          <% case 2: %>
+            (月)
+            <% break; %>
+          <% case 3: %>
+            (火)
+            <% break; %>
+          <% case 4: %>
+            (水)
+            <% break; %>
+          <% case 5: %>
+            (木)
+            <% break; %>
+          <% case 6: %>
+            (金)
+            <% break; %>
+          <% case 7: %>
+            (土)
+            <% break;} %></td>
+        <td align="center"><%= shift.STARTTIME %></td>
+        <td align="center"><%= shift.ENDTIME %></td>
+        <td align="center"><%= shift.ex %></td>
+      </tr>
+    <% }) %>
+  </table>
+  </body>
+</html>
