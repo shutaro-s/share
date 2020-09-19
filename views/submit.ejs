@@ -8,7 +8,7 @@
   <body>
       <h1>シフト提出</h1>
       <form action="/shift/<%= ids.id%>" method="post">
-        <input type="date" name="date" value="date">
+        <input type="date" name="date" value="date" required="true">
         <select name="startHour">
           <option value="00">00</option>
           <option value="01">01</option>
@@ -79,7 +79,6 @@
           <option value="45">45</option>
         </select>
         <br>
-        <button>追加</button>
         <br>
         備考
         <br>

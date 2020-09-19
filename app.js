@@ -11,7 +11,7 @@ app.use(express.urlencoded({extended: false}));
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'H11rag13',
+  password: 'shutaro',
   database: 'shifty'
 });
 
@@ -33,14 +33,15 @@ app.get('/index', (req, res) => {
   res.redirect('/');
 });
 app.post('/index', (req, res) => {
-  var pass = req.body.pass;
-  // 暗号化
-  var sha512 = crypto.createHash('sha512');
-  sha512.update(pass)
-  var hash = sha512.digest('hex')
+    var pass = req.body.pass;
+    var id = req.body.id;
+    // 暗号化
+    var sha512 = crypto.createHash('sha512');
+    sha512.update(pass)
+    var hash = sha512.digest('hex')
   connection.query(
     'SELECT e.id, e.name, e.admin_flag, e.password, t.id AS shift_id, YEAR(t.startAt) AS YEAR, MONTH(t.startAt) AS MONTH, DAY(t.startAt) AS DAY,DAYOFWEEK(t.startAt) AS DAYOFWEEK, DATE_FORMAT(t.startAt, "%k:%i") AS STARTTIME, DATE_FORMAT(t.endAt, "%k:%i") AS ENDTIME, t.ex FROM testemployee AS e LEFT JOIN testtime AS t ON t.employee_id = e.id WHERE e.id = ? AND e.password = ? ORDER BY t.startAt ASC',
-    [req.body.id, hash],
+    [id, hash],
     (error, results) => {
       //resultsがnullならリダイレクト
       if(results[0] == null){
@@ -53,11 +54,19 @@ app.post('/index', (req, res) => {
 });
 
 //全体確認
-app.get('/confirm', (req, res) => {
+app.get('/confirm/:password', (req, res) => {
   connection.query(
     'SELECT e.id, e.name, t.id AS shift_id, YEAR(t.startAt) AS YEAR, MONTH(t.startAt) AS MONTH, DAY(t.startAt) AS DAY,DAYOFWEEK(t.startAt) AS DAYOFWEEK, DATE_FORMAT(t.startAt, "%k:%i") AS STARTTIME, DATE_FORMAT(t.endAt, "%k:%i") AS ENDTIME, t.ex FROM testemployee AS e INNER JOIN testtime AS t ON t.employee_id = e.id ORDER BY t.startAt ASC',
     (error, results) => {
         res.render('confirm.ejs', {shifts: results});
+    }
+  );
+});
+app.get('/employee/:password', (req, res) => {
+  connection.query(
+    'SELECT id, name, admin_flag, DATE_FORMAT(created_at, "%Y-%m-%d") AS date FROM testemployee',
+    (error, results) => {
+        res.render('employee.ejs', {employees: results});
     }
   );
 });
@@ -99,10 +108,10 @@ app.post('/create', (req, res) => {
 });
 
 //パスワード変更
-app.post('/pass', (req, res) => {
+app.get('/pass/:id', (req, res) => {
   connection.query(
     'SELECT * FROM testemployee WHERE id = ?',
-    [req.body.id],
+    [req.params.id],
     (error, results) => {
       //resultsがnullならリダイレクト
       if(results[0] == null){
@@ -145,7 +154,7 @@ app.post('/shift/:id', (req, res) => {
         'SELECT e.id, e.name, e.admin_flag, e.password, t.id AS shift_id, YEAR(t.startAt) AS YEAR, MONTH(t.startAt) AS MONTH, DAY(t.startAt) AS DAY,DAYOFWEEK(t.startAt) AS DAYOFWEEK, DATE_FORMAT(t.startAt, "%k:%i") AS STARTTIME, DATE_FORMAT(t.endAt, "%k:%i") AS ENDTIME, t.ex FROM testemployee AS e LEFT JOIN testtime AS t ON t.employee_id = e.id WHERE e.id = ? ORDER BY t.startAt ASC',
         [req.params.id],
         (error,results)=>{
-          res.render('index.ejs',{employees:results});
+          res.render('complete.ejs',{employees:results});
         }
       );
     }
@@ -174,7 +183,7 @@ app.post('/update/:id/:employee_id',(req,res)=>{
         'SELECT e.id, e.name, e.admin_flag, e.password, t.id AS shift_id, YEAR(t.startAt) AS YEAR, MONTH(t.startAt) AS MONTH, DAY(t.startAt) AS DAY,DAYOFWEEK(t.startAt) AS DAYOFWEEK, DATE_FORMAT(t.startAt, "%k:%i") AS STARTTIME, DATE_FORMAT(t.endAt, "%k:%i") AS ENDTIME, t.ex FROM testemployee AS e LEFT JOIN testtime AS t ON t.employee_id = e.id WHERE e.id = ? ORDER BY t.startAt ASC',
         [req.params.employee_id],
         (error,results)=>{
-          res.render('index.ejs',{employees:results});
+          res.render('complete.ejs',{employees:results});
         }
       )
     }
@@ -191,10 +200,23 @@ app.post('/delete/:shift_id/:id',(req,res)=>{
         'SELECT e.id, e.name, e.admin_flag, e.password, t.id AS shift_id, YEAR(t.startAt) AS YEAR, MONTH(t.startAt) AS MONTH, DAY(t.startAt) AS DAY,DAYOFWEEK(t.startAt) AS DAYOFWEEK, DATE_FORMAT(t.startAt, "%k:%i") AS STARTTIME, DATE_FORMAT(t.endAt, "%k:%i") AS ENDTIME, t.ex FROM testemployee AS e LEFT JOIN testtime AS t ON t.employee_id = e.id WHERE e.id = ? ORDER BY t.startAt ASC',
         [req.params.id],
         (error,results)=>{
-          res.render('index.ejs',{employees:results});
+          res.render('complete.ejs',{employees:results});
         }
       )
     }
   )
 });
+
+//完了処理
+app.post('/complete',(req, res)=>{
+  connection.query(
+    'SELECT e.id, e.name, e.admin_flag, e.password, t.id AS shift_id, YEAR(t.startAt) AS YEAR, MONTH(t.startAt) AS MONTH, DAY(t.startAt) AS DAY,DAYOFWEEK(t.startAt) AS DAYOFWEEK, DATE_FORMAT(t.startAt, "%k:%i") AS STARTTIME, DATE_FORMAT(t.endAt, "%k:%i") AS ENDTIME, t.ex FROM testemployee AS e LEFT JOIN testtime AS t ON t.employee_id = e.id WHERE e.id = ? ORDER BY t.startAt ASC',
+    [req.body.id],
+    (error, results) => {
+      res.render('index.ejs', {employees: results});
+    }
+  )
+});
+
+
 app.listen(3000);

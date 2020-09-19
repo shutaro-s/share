@@ -8,8 +8,9 @@
     <h1><%= employees[0].name%></h1>
     <form action="/change/<%= employees[0].id%>" method="post">
       新しいパスワード
-      <input type="password" name="pass">
+      <input type="password" name="pass" required="true">
       <input type="submit" value="変更">
     </form>
+    <button type="button" onClick="history.back()">戻る</button>
   </body>
 </html>

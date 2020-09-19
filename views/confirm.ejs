@@ -2,7 +2,7 @@
 <html lang="ja" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>シフト確認</title>
+    <title>全体シフト</title>
   </head>
   <body>
     <h1>全体シフト</h1>
@@ -15,6 +15,24 @@
         <th align="center">希望終了時間</th>
         <th align="center">備考</th>
       </tr>
+      <% var used = [0123456789];%>
+      <% var u = 1;%>
+        <% for(i = 0; i < shifts.length; i++){
+          var flag = true;
+          for(j = 0; j < used.length; j++){
+            if(used[j] == shifts[i].id){%>
+              <% flag = null; %>
+              <% break; %>
+            <% } %>
+          <% } %>
+          <%if(flag){
+            used[u] = shifts[i].id; %>
+            <% u++; %>
+            <input type="checkbox" name="person" value="<%= shifts[i].id %>"><%= shifts[i].name %>
+          <% } %>
+        <% } %>
+        <br>
+        <br>
       <% shifts.forEach((shift)=>{ %>
       <tr>
         <td align="center"><%= shift.id %></td>
@@ -46,7 +64,8 @@
         <td align="center"><%= shift.ex %></td>
       </tr>
     <% }) %>
-    <button type="button" onClick="history.back()">戻る</button>
   </table>
+  <br>
+  <button type="button" onClick="history.back()">戻る</button>
   </body>
 </html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>トップページ</title>
+  </head>
+  <body>
+    <h2>操作が完了しました</h2>
+    <form action="/complete" method="post">
+      <input type="hidden" name="id" value="<%= employees[0].id %>">
+      <input type="submit" value="完了">
+    </form>
+  </body>
+</html>

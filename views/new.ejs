@@ -8,13 +8,13 @@
     <div class="test">
       <form action="/create" method="post">
         従業員コード
-        <input type="text" name="employeeId">
+        <input type="text" name="employeeId" required="true">
         <br>
         名前
-        <input type="text" name="employeeName">
+        <input type="text" name="employeeName" required="true">
         <br>
         パスワード
-        <input type="text" name="employeePass">
+        <input type="password" name="employeePass" required="true">
         <br>
         <select name="employeeAdmin">
           <option value="">選択してください
