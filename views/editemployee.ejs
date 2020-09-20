@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="ja" dir="ltr">
   <head>
@@ -31,37 +30,3 @@
     </div>
   </body>
 </html>
-=======
-<!DOCTYPE html>
-<html lang="ja" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>新規作成</title>
-  </head>
-  <body>
-    <div class="test">
-      <form action="/updateemployee" method="post">
-        従業員コード
-        <input type="text" name="employeeId" value="<%= employees[0].id %>" required="true">
-        <br>
-        名前
-        <input type="text" name="employeeName" value="<%= employees[0].name %>" required="true">
-        <br>
-        <select name="employeeAdmin">
-          <% if(employees[0].admin_flag == 0 ){%>
-            <option value="0" selected>バイト
-            <option value="1">社員
-          <% } else { %>
-            <option value="0">バイト
-            <option value="1" selected>社員
-          <% } %>
-        </select>
-        <br>
-        <input type="submit" value="編集する">
-        <br>
-        <button type="button" onClick="history.back()">戻る</button>
-      </form>
-    </div>
-  </body>
-</html>
->>>>>>> fb6b1df5995f52b566558e06ac6c7765a6efa1a7

@@ -11,7 +11,7 @@ app.use(express.urlencoded({extended: false}));
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'MMjn7020@aoyama',
+  password: 'mai',
   database: 'shifty'
 });
 
