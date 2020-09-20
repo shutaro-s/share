@@ -19,13 +19,15 @@
         <tr>
           <td align="center"><%= employee.id %></td>
           <td align="center"><%= employee.name %></td>
-          <% if( %> <%= employee.admin_flag %> <% == 0){ %>
-                <td align="center">バイト</td>
-                <% }else{ %>
-                <td align="center">社員</td>
-          <%  } %>
+          <td align="center">
+            <% if(employee.admin_flag == 1){ %>
+              社員
+            <% }else{ %>
+              アルバイト
+            <% } %>
+          </td>
           <td align="center"><%= employee.date %></td>
-          <td align="center"><a href="/edit/<%= employee.id %>">編集</a></td>
+          <td align="center"><a href="/editemployee/<%= employee.id %>">編集</a></td>
           <td align="center">
             <form action="/delete/<%= employee.id %>/<%= employees[0].id %>" method="post">
               <input type="submit" value="削除">
