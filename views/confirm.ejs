@@ -3,40 +3,59 @@
   <head>
     <meta charset="utf-8">
     <title>全体シフト</title>
+    <link rel="stylesheet" href="/css/style.css"></style>
   </head>
   <body>
     <h1>全体シフト</h1>
+    <div class="hidden_box">
+      <label for="label1">フィルター</label>
+      <input type="checkbox" id="label1">
+      <div class="hidden_show">
+        <form action="/filter" method="post">
+          <input type="date" name="date">
+          <% var used = [0123456789876543210];%>
+          <% var u = 1;%>
+            <% for(i = 0; i < shifts.length; i++){
+              var flag = true;
+              for(j = 0; j < used.length; j++){
+                if(used[j] == shifts[i].id){%>
+                  <% flag = null; %>
+                  <% break; %>
+                <% } %>
+              <% } %>
+              <%if(flag){
+                used[u] = shifts[i].id; %>
+                <% u++; %>
+                <input type="radio" name="person" value="<%= shifts[i].id %>"><%= shifts[i].name %>
+              <% } %>
+            <% } %>
+            <input type="radio" name="person" value=0123456789876543210 checked="checked">全員
+          <input type="submit" value="検索">
+        </form>
+        <a href="/confirm">フィルタリングを解除する</a>
+      </div>
+    </div>
     <table width="80%">
       <tr>
         <th align="center">ID</th>
         <th align="center">名前</th>
+        <th align="center">役職</th>
         <th align="center">日付</th>
         <th align="center">希望開始時間</th>
         <th align="center">希望終了時間</th>
         <th align="center">備考</th>
       </tr>
-      <% var used = [0123456789];%>
-      <% var u = 1;%>
-        <% for(i = 0; i < shifts.length; i++){
-          var flag = true;
-          for(j = 0; j < used.length; j++){
-            if(used[j] == shifts[i].id){%>
-              <% flag = null; %>
-              <% break; %>
-            <% } %>
-          <% } %>
-          <%if(flag){
-            used[u] = shifts[i].id; %>
-            <% u++; %>
-            <input type="checkbox" name="person" value="<%= shifts[i].id %>"><%= shifts[i].name %>
-          <% } %>
-        <% } %>
-        <br>
-        <br>
       <% shifts.forEach((shift)=>{ %>
       <tr>
         <td align="center"><%= shift.id %></td>
         <td align="center"><%= shift.name %></td>
+        <td align="center">
+          <% if(shift.admin_flag == 1){ %>
+            社員
+          <% }else{ %>
+            アルバイト
+          <% } %>
+        </td>
         <td align="center"><%= shift.YEAR %>/<%= shift.MONTH %>/<%= shift.DAY %><% switch(shift.DAYOFWEEK){
           case 1: %>
             (日)

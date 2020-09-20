@@ -53,18 +53,19 @@ app.post('/index', (req, res) => {
   );
 });
 
-//全体確認
-app.get('/confirm/:password', (req, res) => {
+//全体確認（シフト）
+app.get('/confirm', (req, res) => {
   connection.query(
-    'SELECT e.id, e.name, t.id AS shift_id, YEAR(t.startAt) AS YEAR, MONTH(t.startAt) AS MONTH, DAY(t.startAt) AS DAY,DAYOFWEEK(t.startAt) AS DAYOFWEEK, DATE_FORMAT(t.startAt, "%k:%i") AS STARTTIME, DATE_FORMAT(t.endAt, "%k:%i") AS ENDTIME, t.ex FROM testemployee AS e INNER JOIN testtime AS t ON t.employee_id = e.id ORDER BY t.startAt ASC',
+    'SELECT e.id, e.name, t.id AS shift_id, e.admin_flag, YEAR(t.startAt) AS YEAR, MONTH(t.startAt) AS MONTH, DAY(t.startAt) AS DAY,DAYOFWEEK(t.startAt) AS DAYOFWEEK, DATE_FORMAT(t.startAt, "%k:%i") AS STARTTIME, DATE_FORMAT(t.endAt, "%k:%i") AS ENDTIME, t.ex FROM testemployee AS e INNER JOIN testtime AS t ON t.employee_id = e.id ORDER BY t.startAt ASC',
     (error, results) => {
         res.render('confirm.ejs', {shifts: results});
     }
   );
 });
+//全体確認（従業員）
 app.get('/employee/:password', (req, res) => {
   connection.query(
-    'SELECT id, name, admin_flag, DATE_FORMAT(created_at, "%Y-%m-%d") AS date FROM testemployee',
+    'SELECT id, name, admin_flag, DATE_FORMAT(created_at, "%Y-%m-%d") AS date FROM testemployee ORDER BY date',
     (error, results) => {
         res.render('employee.ejs', {employees: results});
     }
@@ -105,6 +106,25 @@ app.post('/create', (req, res) => {
       res.redirect('/');
     }
   );
+});
+//従業員編集
+app.get('/editemployee/:id',(req,res)=>{
+  connection.query(
+    'SELECT id, name, admin_flag  FROM testemployee WHERE id = ?',
+    [req.params.id],
+    (error,results)=>{
+      res.render('editemployee.ejs',{employees:results});
+    }
+  )
+});
+app.post('/updateemployee',(req,res)=>{
+  connection.query(
+    'UPDATE testemployee SET id = ?, name = ?, admin_flag = ? WHERE id = ?',
+    [req.body.employeeId, req.body.employeeName, req.body.employeeAdmin, req.params.id],
+    (error,results)=>{
+      res.redirect('/');
+    }
+  )
 });
 
 //パスワード変更
@@ -218,5 +238,34 @@ app.post('/complete',(req, res)=>{
   )
 });
 
+
+//フィルタリング機能
+app.post('/filter',(req,res)=>{
+  if(req.body.person == 0123456789876543210){
+    connection.query(
+      'SELECT e.id, e.name, t.id AS shift_id, YEAR(t.startAt) AS YEAR, MONTH(t.startAt) AS MONTH, DAY(t.startAt) AS DAY,DAYOFWEEK(t.startAt) AS DAYOFWEEK, DATE_FORMAT(t.startAt, "%k:%i") AS STARTTIME, DATE_FORMAT(t.endAt, "%k:%i") AS ENDTIME, t.ex FROM testemployee AS e LEFT JOIN testtime AS t ON t.employee_id = e.id WHERE DATE_FORMAT(t.startAt,"%Y-%m-%d") = ? ORDER BY t.startAt ASC',
+      [req.body.date],
+      (error,results)=>{
+        res.render('confirm.ejs',{shifts:results});
+      }
+    )
+  }else if(req.body.date == ""){
+    connection.query(
+      'SELECT e.id, e.name, t.id AS shift_id, YEAR(t.startAt) AS YEAR, MONTH(t.startAt) AS MONTH, DAY(t.startAt) AS DAY,DAYOFWEEK(t.startAt) AS DAYOFWEEK, DATE_FORMAT(t.startAt, "%k:%i") AS STARTTIME, DATE_FORMAT(t.endAt, "%k:%i") AS ENDTIME, t.ex FROM testemployee AS e LEFT JOIN testtime AS t ON t.employee_id = e.id WHERE e.id = ? ORDER BY t.startAt ASC',
+      [req.body.person],
+      (error,results)=>{
+        res.render('confirm.ejs',{shifts:results});
+      }
+    )
+  }else{
+    connection.query(
+      'SELECT e.id, e.name, t.id AS shift_id, YEAR(t.startAt) AS YEAR, MONTH(t.startAt) AS MONTH, DAY(t.startAt) AS DAY,DAYOFWEEK(t.startAt) AS DAYOFWEEK, DATE_FORMAT(t.startAt, "%k:%i") AS STARTTIME, DATE_FORMAT(t.endAt, "%k:%i") AS ENDTIME, t.ex FROM testemployee AS e LEFT JOIN testtime AS t ON t.employee_id = e.id WHERE DATE_FORMAT(t.startAt,"%Y-%m-%d") = ? AND e.id = ? ORDER BY t.startAt ASC',
+      [req.body.date, req.body.person],
+      (error,results)=>{
+        res.render('confirm.ejs',{shifts:results});
+      }
+    )
+  }
+});
 
 app.listen(3000);

@@ -9,7 +9,7 @@
       <% if (employees[0].admin_flag == 1) { %>
         <a href="/employee/<%= employees[0].password %>">従業員一覧</a>
         <a href="/new/<%= employees[0].password %>">従業員追加</a>
-        <a href="/confirm/<%= employees[0].password %>">全体シフト確認</a>
+        <a href="/confirm">全体シフト確認</a>
       <% } %>
     <a href="/pass/<%= employees[0].id%>">パスワード変更</a>
     <a href="/submit/<%= employees[0].id%>/<%= employees[0].password%>">シフト提出</a>
