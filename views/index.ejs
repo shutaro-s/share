@@ -3,64 +3,79 @@
   <head>
     <meta charset="utf-8">
     <title>トップページ</title>
+    <!-- fontawesomeの読み込み -->
+    <script src="https://kit.fontawesome.com/a1de0a5eef.js" crossorigin="anonymous"></script> 
     <link rel="stylesheet" href="/css/index.css"></style>
+    <link rel="stylesheet" href="/css/stylesheet.css"></style>
   </head>
   <body>
-    <h1><%= employees[0].name %></h1>
-      <% if (employees[0].admin_flag == 1) { %>
-        <a href="/employee/<%= employees[0].password %>">従業員一覧</a>
-        <a href="/new/<%= employees[0].password %>">従業員追加</a>
-        <a href="/confirm">全体シフト確認</a>
-      <% } %>
-    <a href="/pass/<%= employees[0].id%>">パスワード変更</a>
-    <a href="/submit/<%= employees[0].id%>/<%= employees[0].password%>">シフト提出</a>
-    <h1>希望</h1>
-    <table>
-      <tr>
-        <th>日付</th>
-        <th>希望開始時間</th>
-        <th>希望終了時間</th>
-        <th>備考</th>
-        <th></th>
-        <th></th>
-      </tr>
-      <% employees.forEach((employee)=>{ %>
-      <tr>
-        <td><%= employee.YEAR %>/<%= employee.MONTH %>/<%= employee.DAY %><% switch(employee.DAYOFWEEK){
-          case 1: %>
-            (日)
-            <% break; %>
-          <% case 2: %>
-            (月)
-            <% break; %>
-          <% case 3: %>
-            (火)
-            <% break; %>
-          <% case 4: %>
-            (水)
-            <% break; %>
-          <% case 5: %>
-            (木)
-            <% break; %>
-          <% case 6: %>
-            (金)
-            <% break; %>
-          <% case 7: %>
-            (土)
-            <% break;} %></td>
-        <td><%= employee.STARTTIME %></td>
-        <td><%= employee.ENDTIME %></td>
-        <td><%= employee.ex %></td>
-        <td><a href="/edit/<%= employee.shift_id %>">編集</a></td>
-        <td>
-          <form action="/delete/<%= employee.shift_id %>/<%= employees[0].id %>" method="post">
-            <input type="submit" value="削除">
-          </form>
-        </td>
-      </tr>
-    <% }) %>
-  </table>
-  <br>
-    <a href="/">ログアウト</a>
+    <header>
+      <h1>shifty</h1>
+      <label for="check"><span class="fas fa-user navButton"><%= employees[0].name %></span></label>
+      <input type="checkbox" id="check">
+      <nav>
+        <ul>
+          <% if (employees[0].admin_flag == 1) { %>
+            <li><a href="/employee/<%= employees[0].password %>">従業員一覧</a></li>
+            <li><a href="/new/<%= employees[0].password %>">従業員追加</a></li>
+            <li><a href="/confirm">全体シフト確認</a></li>
+          <% } %>
+          <li><a href="/pass/<%= employees[0].id%>">パスワード変更</a></li>
+          <li><a href="/submit/<%= employees[0].id%>/<%= employees[0].password%>">シフト提出</a></li>
+          <li class="logout"><a href="/"><i class="fas fa-sign-out-alt">ログアウト</i></a></li>
+        </ul>
+      </nav>
+
+      <img src="images/logo.png" alt="RISE always learning">
+    </header>
+    <div class="contents">
+      <h1>希望</h1>
+      <table>
+        <tr>
+          <th>日付</th>
+          <th>出勤</th>
+          <th>退勤</th>
+          <th>備考</th>
+          <th></th>
+          <th></th>
+        </tr>
+        <% employees.forEach((employee)=>{ %>
+        <tr>
+          <td><%= employee.YEAR %>/<%= employee.MONTH %>/<%= employee.DAY %><% switch(employee.DAYOFWEEK){
+            case 1: %>
+              (日)
+              <% break; %>
+            <% case 2: %>
+              (月)
+              <% break; %>
+            <% case 3: %>
+              (火)
+              <% break; %>
+            <% case 4: %>
+              (水)
+              <% break; %>
+            <% case 5: %>
+              (木)
+              <% break; %>
+            <% case 6: %>
+              (金)
+              <% break; %>
+            <% case 7: %>
+              (土)
+              <% break;} %>
+          </td>
+          <td><%= employee.STARTTIME %></td>
+          <td><%= employee.ENDTIME %></td>
+          <td><%= employee.ex %></td>
+          <td><a href="/edit/<%= employee.shift_id %>">編集</a></td>
+          <td>
+            <form action="/delete/<%= employee.shift_id %>/<%= employees[0].id %>" method="post">
+              <input type="submit" value="削除">
+            </form>
+          </td>
+        </tr>
+        <% }) %>
+      </table>
+    </div>
   </body>
 </html>
