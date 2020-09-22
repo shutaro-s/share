@@ -63,13 +63,52 @@ app.get('/confirm', (req, res) => {
   );
 });
 //全体確認（従業員）
-app.get('/employee/:password', (req, res) => {
+app.get('/employee', (req, res) => {
   connection.query(
     'SELECT id, name, admin_flag, DATE_FORMAT(created_at, "%Y-%m-%d") AS date FROM testemployee ORDER BY date',
     (error, results) => {
         res.render('employee.ejs', {employees: results});
     }
   );
+});
+//従業員編集
+app.get('/editemployee/:id',(req,res)=>{
+  connection.query(
+    'SELECT id, name, admin_flag FROM testemployee WHERE id = ?',
+    [req.params.id],
+    (error,results)=>{
+      res.render('editemployee.ejs',{employees:results});
+    }
+  )
+});
+app.post('/updateemployee/:id',(req,res)=>{
+  connection.query(
+    'UPDATE testemployee SET id = ?, name = ?, admin_flag = ? WHERE id = ?',
+    [req.body.employeeId, req.body.employeeName, req.body.employeeAdmin, req.params.id],
+    (error,results)=>{
+      connection.query(
+        'SELECT id, name, admin_flag, DATE_FORMAT(created_at, "%Y-%m-%d") AS date FROM testemployee ORDER BY date',
+        (error, results) => {
+            res.render('employee.ejs', {employees: results});
+        }
+      );
+    }
+  )
+});
+//従業員削除
+app.post('/deleteemployee/:id',(req,res)=>{
+  connection.query(
+    'DELETE FROM testemployee WHERE id = ?',
+    [req.params.id],
+    (error,results)=>{
+      connection.query(
+        'SELECT id, name, admin_flag, DATE_FORMAT(created_at, "%Y-%m-%d") AS date FROM testemployee ORDER BY date',
+        (error, results) => {
+            res.render('employee.ejs', {employees: results});
+        }
+      );
+    }
+  )
 });
 
 //新規作成画面遷移&新規作成処理
@@ -106,25 +145,6 @@ app.post('/create', (req, res) => {
       res.redirect('/');
     }
   );
-});
-//従業員編集
-app.get('/editemployee/:id',(req,res)=>{
-  connection.query(
-    'SELECT id, name, admin_flag  FROM testemployee WHERE id = ?',
-    [req.params.id],
-    (error,results)=>{
-      res.render('editemployee.ejs',{employees:results});
-    }
-  )
-});
-app.post('/updateemployee',(req,res)=>{
-  connection.query(
-    'UPDATE testemployee SET id = ?, name = ?, admin_flag = ? WHERE id = ?',
-    [req.body.employeeId, req.body.employeeName, req.body.employeeAdmin, req.params.id],
-    (error,results)=>{
-      res.redirect('/');
-    }
-  )
 });
 
 //パスワード変更

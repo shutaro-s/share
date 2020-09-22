@@ -3,33 +3,34 @@
   <head>
     <meta charset="utf-8">
     <title>従業員一覧</title>
+    <link rel="stylesheet" href="/css/employee.css"></style>
   </head>
   <body>
     <h1>従業員一覧</h1>
     <table width="80%">
       <tr>
-        <th align="center">ID</th>
-        <th align="center">名前</th>
-        <th align="center">役職</th>
-        <th align="center">作成日</th>
-        <th align="center"></th>
-        <th align="center"></th>
+        <th>ID</th>
+        <th>名前</th>
+        <th>役職</th>
+        <th>作成日</th>
+        <th></th>
+        <th></th>
       </tr>
       <% employees.forEach((employee)=>{ %>
         <tr>
-          <td align="center"><%= employee.id %></td>
-          <td align="center"><%= employee.name %></td>
-          <td align="center">
+          <td><%= employee.id %></td>
+          <td><%= employee.name %></td>
+          <td>
             <% if(employee.admin_flag == 1){ %>
               社員
             <% }else{ %>
               アルバイト
             <% } %>
           </td>
-          <td align="center"><%= employee.date %></td>
-          <td align="center"><a href="/editemployee/<%= employee.id %>">編集</a></td>
-          <td align="center">
-            <form action="/delete/<%= employee.id %>/<%= employees[0].id %>" method="post">
+          <td><%= employee.date %></td>
+          <td><a href="/editemployee/<%= employee.id %>">編集</a></td>
+          <td>
+            <form action="/deleteemployee/<%= employee.id %>" method="post">
               <input type="submit" value="削除">
             </form>
           </td>

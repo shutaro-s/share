@@ -1,0 +1,92 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    list-style: none;
+}
+
+header {
+    width: 100%;
+    background-color: rgb(255, 195, 0);
+    position: fixed;
+    z-index: 2;
+}
+
+header h1 {
+    float: left;
+    font-size: 24px;
+    font-family: 'Monotype Corsiva';
+    color:  rgb(113, 113, 113);
+    padding: 18px 10px 0 10px;
+}
+
+header span {
+    float: left;
+    font-size: 20px;
+    color:  rgb(113, 113, 113);
+    padding: 22px;
+    cursor: pointer;
+}
+
+header span:hover {
+    background-color:  antiquewhite;
+}
+
+header img {
+    float: right;
+    width: 100px;
+    padding: 5px 0;
+}
+
+/* クリックイベント */
+input + nav {
+    display: none;
+}
+
+input:checked + nav {
+    display:block;
+}
+
+#check {
+    display:none;
+}
+
+nav {
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    margin-top: 63px;
+    left: 0;
+    background-color: antiquewhite;
+}
+
+nav li {
+    padding-top: 30px;
+    line-height: 30px;
+    text-align: center;
+}
+
+nav a {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav :link,
+nav a:visited {
+    color: rgb(62, 62, 62);
+}
+
+nav a:hover {
+    display: block;
+    background-color: rgb(250, 210, 81);
+}
+
+.logout {
+    padding-bottom: 20px;
+}
+
+.contents {
+    padding: 100px 0 0 200px;
+}

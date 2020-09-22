@@ -6,7 +6,7 @@
   </head>
   <body>
     <div class="test">
-      <form action="/updateemployee" method="post">
+      <form action="/updateemployee/<%= employees[0].id %>" method="post">
         従業員コード
         <input type="text" name="employeeId" value="<%= employees[0].id %>" required="true">
         <br>
