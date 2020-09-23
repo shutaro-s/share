@@ -13,11 +13,6 @@
       <div class="hidden_show">
         <form action="/filter" method="post">
           <input type="date" name="date">
-          <select name="job_type">
-            <option value=2>勤務形態</option>
-            <option value=1>社員</option>
-            <option value=0>バイト</option>
-          </select>
           <% var used = [0123456789876543210]; %>
           <% var u = 1; %>
             <% for(i = 0; i < shifts.length; i++){

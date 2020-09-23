@@ -28,6 +28,7 @@
 
       <img src="images/logo.png" alt="RISE always learning">
     </header>
+    <% var confirm;%>
     <div class="contents">
       <h1>シフト表</h1>
       <table width="50%">
@@ -71,9 +72,9 @@
             <% if(employee.ex != null){ %>
               <% str = employee.ex; %>
               <% if(str.includes('確定')){ %>
-                <% var confirm = 1; %>
+                <% confirm = 1; %>
               <% }else{ %>
-                <% var confirm = 0; %>
+                <% confirm = 0; %>
               <% } %>
               <% var ex = employee.ex; %>
               <% var right_str = ex.replace(/確定/g,""); %>
@@ -106,16 +107,16 @@
         <% for(var hour = 8; hour <= 23; hour++){ %>
           <% for(var minute = 0; minute < 60; minute = minute + 15){ %>
             <% if(minute == 0){ %>
-              <th style = "background-color : #ffc300; width : 100px;"><%= hour %></th>
+              <th style = "background-color : #d3d3d3; width : 100px;"><%= hour %></th>
             <% }else{ %>
-              <th style = "width : 100px;"><%= minute %></th>
+              <th style = "width : 100px;">&nbsp;&nbsp;&nbsp;</th>
             <% } %>
           <% } %>
         <% } %>
       </tr>
         <% employees.forEach((employee)=>{ %>
           <tr>
-            <td style = "width : 100px;"><%= employee.YEAR %>/<%= employee.MONTH %>/<%= employee.DAY %><% switch(employee.DAYOFWEEK){
+            <td style = "width : 100px;"><b><%= employee.YEAR %>/<%= employee.MONTH %>/<%= employee.DAY %><% switch(employee.DAYOFWEEK){
               case 1: %>
                 (日)
                 <% break; %>
@@ -137,7 +138,7 @@
               <% case 7: %>
                 (土)
                 <% break;
-            } %></td>
+            } %></b></td>
             <% var flag = 0; %>
             <% for(var hour = 8; hour <= 23; hour++){ %>
               <% for(var minute = 0; minute < 60; minute = minute + 15){ %>
@@ -147,8 +148,20 @@
                 <% if(employee.ENDHOUR == hour && employee.ENDMINUTE == minute){ %>
                   <% flag = 0; %>
                 <% } %>
+                <% if(employee.ex != null){ %>
+                  <% str = employee.ex; %>
+                  <% if(str.includes('確定')){ %>
+                    <% confirm = 1; %>
+                  <% }else{ %>
+                    <% confirm = 0; %>
+                  <% } %>
+                <% } %>
                 <td <% if(flag == 1){ %>
-                  style = "background-color : #ffc300; width : 100px;"
+                  <% if(confirm == 1){ %>
+                    style = "background-color : #ff4500; width : 100px;"
+                  <% } else { %>
+                    style = "background-color : #f0e68c; width : 100px;"
+                  <% } %>
                 <% } %></td>
               <% } %>
             <% } %>
