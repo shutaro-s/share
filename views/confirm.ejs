@@ -86,46 +86,6 @@
               <td align="center">
                 <form action="/correct" method="post">
                   <select name="startHour">
-          <% if(shift.starth == 00 ){%>
-            <option value="00" selected>00</option>
-          <% } else { %>
-          <option value="00">00</option>
-          <% } %>
-          <% if(shift.starth == 1 ){%>
-            <option value="01" selected>01</option>
-          <% } else { %>
-          <option value="01">01</option>
-          <% } %>
-          <% if(shift.starth == 2 ){%>
-            <option value="02" selected>02</option>
-          <% } else { %>
-          <option value="02">02</option>
-          <% } %>
-          <% if(shift.starth == 3 ){%>
-            <option value="03" selected>03</option>
-          <% } else { %>
-          <option value="03">03</option>
-          <% } %>
-          <% if(shift.starth == 4 ){%>
-            <option value="04" selected>04</option>
-          <% } else { %>
-          <option value="04">04</option>
-          <% } %>
-          <% if(shift.starth == 5 ){%>
-            <option value="05" selected>05</option>
-          <% } else { %>
-          <option value="05">05</option>
-          <% } %>
-          <% if(shift.starth == 6 ){%>
-            <option value="06" selected>06</option>
-          <% } else { %>
-          <option value="06">06</option>
-          <% } %>
-          <% if(shift.starth == 7 ){%>
-            <option value="07" selected>07</option>
-          <% } else { %>
-          <option value="07">07</option>
-          <% } %>
           <% if(shift.starth == 8 ){%>
             <option value="08" selected>08</option>
           <% } else { %>
@@ -206,11 +166,6 @@
           <% } else { %>
           <option value="23">23</option>
           <% } %>
-          <% if(shift.starth == 24 ){%>
-            <option value="24" selected>24</option>
-          <% } else { %>
-          <option value="24">24</option>
-          <% } %>
         </select>
         :
         <select name="startMinute">
@@ -237,46 +192,6 @@
         </select>
               </td>
               <td align="center"><select name="endHour">
-          <% if(shift.endh == 00 ){%>
-            <option value="00" selected>00</option>
-          <% } else { %>
-          <option value="00">00</option>
-          <% } %>
-          <% if(shift.endh == 1 ){%>
-            <option value="01" selected>01</option>
-          <% } else { %>
-          <option value="01">01</option>
-          <% } %>
-          <% if(shift.endh == 2 ){%>
-            <option value="02" selected>02</option>
-          <% } else { %>
-          <option value="02">02</option>
-          <% } %>
-          <% if(shift.endh == 3 ){%>
-            <option value="03" selected>03</option>
-          <% } else { %>
-          <option value="03">03</option>
-          <% } %>
-          <% if(shift.endh == 4 ){%>
-            <option value="04" selected>04</option>
-          <% } else { %>
-          <option value="04">04</option>
-          <% } %>
-          <% if(shift.endh == 5 ){%>
-            <option value="05" selected>05</option>
-          <% } else { %>
-          <option value="05">05</option>
-          <% } %>
-          <% if(shift.endh == 6 ){%>
-            <option value="06" selected>06</option>
-          <% } else { %>
-          <option value="06">06</option>
-          <% } %>
-          <% if(shift.endh == 7 ){%>
-            <option value="07" selected>07</option>
-          <% } else { %>
-          <option value="07">07</option>
-          <% } %>
           <% if(shift.endh == 8 ){%>
             <option value="08" selected>08</option>
           <% } else { %>
@@ -356,11 +271,6 @@
             <option value="23" selected>23</option>
           <% } else { %>
           <option value="23">23</option>
-          <% } %>
-          <% if(shift.endh == 24 ){%>
-            <option value="24" selected>24</option>
-          <% } else { %>
-          <option value="24">24</option>
           <% } %>
         </select>
         :
